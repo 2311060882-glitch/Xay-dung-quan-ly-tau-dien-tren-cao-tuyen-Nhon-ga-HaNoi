@@ -1,0 +1,70 @@
+METRO APP — URL API ĐỀ XUẤT
+Đây là thiết kế, chưa phải URL đã hoạt động.
+Tiền tố: /api. {id} là mã bản ghi cụ thể.
+Backend PHP trả JSON. Các URL đẹp cần router/cấu hình chuyển request đến PHP.
+GET: đọc; POST: tạo/thực hiện; PATCH: cập nhật; DELETE: xóa.
+
+TÀI KHOẢN
+POST   /api/auth/register                 Đăng ký
+POST   /api/auth/login                    Đăng nhập
+POST   /api/auth/logout                   Đăng xuất
+GET    /api/me                            Thông tin cá nhân
+PATCH  /api/me                            Cập nhật cá nhân
+POST   /api/me/change-password            Đổi mật khẩu
+
+TUYẾN, GA, LOẠI VÉ
+GET    /api/lines                         Danh sách tuyến
+GET    /api/lines/{id}/stations            Ga của tuyến
+GET    /api/ticket-types                  Loại vé
+POST   /api/tickets/quote                 Tính giá
+
+ĐƠN MUA VÉ
+POST   /api/orders                        Tạo đơn
+GET    /api/orders                        Lịch sử đơn của tôi
+GET    /api/orders/{id}                   Chi tiết đơn
+POST   /api/orders/{id}/pay               Thanh toán bằng số dư ví
+
+VÉ VÀ QR
+GET    /api/tickets                       Vé của tôi; có thể lọc trạng thái/người dùng vé
+GET    /api/tickets/{id}                  Chi tiết vé
+GET    /api/tickets/{id}/qr               Dữ liệu QR của vé
+GET    /api/tickets/{id}/usage            Lịch sử sử dụng
+POST   /api/ticket-validations            Kiểm tra và ghi nhận quét; chỉ cổng/nhân viên được phép
+
+VÍ ĐIỆN TỬ
+GET    /api/wallet                        Số dư ví
+POST   /api/wallet/top-ups                Tạo yêu cầu nạp
+GET    /api/wallet/top-ups/{id}           Trạng thái yêu cầu nạp
+GET    /api/wallet/transactions           Lịch sử giao dịch
+Thông báo từ nhà cung cấp: bổ sung endpoint theo hợp đồng tích hợp sau khi chọn nhà cung cấp.
+Callback phải được xác minh; không dùng phiên khách hàng làm bằng chứng thanh toán.
+
+NGƯỜI THÂN
+GET    /api/dependents                    Danh sách
+POST   /api/dependents                    Thêm
+PATCH  /api/dependents/{id}               Sửa
+DELETE /api/dependents/{id}               Xóa theo quy tắc giữ lịch sử
+
+HỒ SƠ ƯU ĐÃI
+POST   /api/priority-applications         Gửi hồ sơ
+GET    /api/priority-applications         Hồ sơ của tôi
+GET    /api/priority-applications/{id}    Chi tiết
+
+QUẢN TRỊ
+POST   /api/admin/lines                  Thêm tuyến
+PATCH  /api/admin/lines/{id}              Sửa/trạng thái tuyến
+POST   /api/admin/stations               Thêm ga
+PATCH  /api/admin/stations/{id}           Sửa ga
+POST   /api/admin/ticket-types           Thêm loại vé
+PATCH  /api/admin/ticket-types/{id}       Sửa loại vé
+GET    /api/admin/priority-applications  Hồ sơ chờ duyệt
+PATCH  /api/admin/priority-applications/{id} Duyệt/từ chối
+GET    /api/admin/orders                 Xem đơn
+GET    /api/admin/transactions           Xem giao dịch
+
+QUY TẮC
+Mọi API dữ liệu riêng cần đăng nhập và kiểm tra quyền sở hữu.
+API admin cần role ADMIN; quét QR cần quyền riêng.
+Nếu dùng session cookie, bảo vệ CSRF cho request thay đổi dữ liệu.
+Không trả password hoặc password hash trong JSON.
+

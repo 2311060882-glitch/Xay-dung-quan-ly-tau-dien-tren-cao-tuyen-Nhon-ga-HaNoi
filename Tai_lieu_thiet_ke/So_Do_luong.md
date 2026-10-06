@@ -1,4 +1,4 @@
-
+( Ấn edit file để xem chi tiết hoặc tải code về file md)
 ### 🌲 SƠ ĐỒ CÂY CÁC LUỒNG CHỨC NĂNG (MINDMAP STRUCTURE)
 
 HỆ THỐNG METRO APP

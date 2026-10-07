@@ -4,63 +4,43 @@ Tiền tố: /api. {id} là mã bản ghi cụ thể.
 Backend PHP trả JSON. Các URL đẹp cần router/cấu hình chuyển request đến PHP.
 GET: đọc; POST: tạo/thực hiện; PATCH: cập nhật; DELETE: xóa.
 
-TÀI KHOẢN
-POST   /api/auth/register                 Đăng ký
-POST   /api/auth/login                    Đăng nhập
-POST   /api/auth/logout                   Đăng xuất
-GET    /api/me                            Thông tin cá nhân
-PATCH  /api/me                            Cập nhật cá nhân
-POST   /api/me/change-password            Đổi mật khẩu
+Tiền tố chung: /api/v1
 
-TUYẾN, GA, LOẠI VÉ
-GET    /api/lines                         Danh sách tuyến
-GET    /api/lines/{id}/stations            Ga của tuyến
-GET    /api/ticket-types                  Loại vé
-POST   /api/tickets/quote                 Tính giá
+1. TÀI KHOẢN & HỒ SƠ (AUTH & PROFILE)
+POST   /api/v1/auth/register          - Đăng ký tài khoản
+POST   /api/v1/auth/login             - Đăng nhập
+POST   /api/v1/auth/logout            - Đăng xuất khỏi thiết bị
+GET    /api/v1/me                     - Lấy thông tin cá nhân (Avatar, Họ tên, SĐT)
+PUT    /api/v1/me                     - Cập nhật thông tin cá nhân / Avatar
+POST   /api/v1/me/change-password     - Đổi mật khẩu
 
-ĐƠN MUA VÉ
-POST   /api/orders                        Tạo đơn
-GET    /api/orders                        Lịch sử đơn của tôi
-GET    /api/orders/{id}                   Chi tiết đơn
-POST   /api/orders/{id}/pay               Thanh toán bằng số dư ví
+2. TUYẾN, GA & LOẠI VÉ (DÙNG CHUNG - LẤY TỪ DB SEEDER)
+GET    /api/v1/lines                  - Danh sách các tuyến tàu (VD: Cát Linh - Hà Đông)
+GET    /api/v1/lines/{id}/stations    - Danh sách nhà ga của tuyến (Cho màn TÌM GA TÀU)
+GET    /api/v1/ticket-types           - Danh sách loại vé & giá (Cho màn MUA VÉ)
 
-VÉ VÀ QR
-GET    /api/tickets                       Vé của tôi; có thể lọc trạng thái/người dùng vé
-GET    /api/tickets/{id}                  Chi tiết vé
-GET    /api/tickets/{id}/qr               Dữ liệu QR của vé
-GET    /api/tickets/{id}/usage            Lịch sử sử dụng
-POST   /api/ticket-validations            Kiểm tra và ghi nhận quét; chỉ cổng/nhân viên được phép
+3. VÉ TÀU & MÃ QR (CORE)
+POST   /api/v1/tickets/buy            - Mua vé (Truyền ticket_type_id, line_id, dependent_id nếu mua hộ)
+GET    /api/v1/tickets                - Danh sách vé (Query: ?type=OWN hoặc ?type=OTHERS)
+GET    /api/v1/tickets/{id}           - Xem chi tiết 1 tấm vé
+GET    /api/v1/tickets/active-qr      - Lấy vé đang kích hoạt gần nhất (Cho NÚT QR TRUNG TÂM)
 
-VÍ ĐIỆN TỬ
-GET    /api/wallet                        Số dư ví
-POST   /api/wallet/top-ups                Tạo yêu cầu nạp
-GET    /api/wallet/top-ups/{id}           Trạng thái yêu cầu nạp
-GET    /api/wallet/transactions           Lịch sử giao dịch
-Thông báo từ nhà cung cấp: bổ sung endpoint theo hợp đồng tích hợp sau khi chọn nhà cung cấp.
-Callback phải được xác minh; không dùng phiên khách hàng làm bằng chứng thanh toán.
+4. VÍ ĐIỆN TỬ & LỊCH SỬ GIAO DỊCH
+GET    /api/v1/wallet                 - Lấy số dư ví & trạng thái liên kết ngân hàng
+POST   /api/v1/wallet/top-up          - Nạp tiền vào ví (Giả lập tăng số dư)
+GET    /api/v1/wallet/transactions    - Xem lịch sử giao dịch nạp tiền & mua vé
 
-NGƯỜI THÂN
-GET    /api/dependents                    Danh sách
-POST   /api/dependents                    Thêm
-PATCH  /api/dependents/{id}               Sửa
-DELETE /api/dependents/{id}               Xóa theo quy tắc giữ lịch sử
+5. NGHIỆP VỤ PHỤ TRỢ (ĐỊNH DANH HỘ & VÉ ƯU TIÊN)
+GET    /api/v1/dependents             - Xem danh sách người thân đã định danh
+POST   /api/v1/dependents             - Thêm thông tin người thân mới
+PUT    /api/v1/dependents/{id}        - Sửa thông tin người thân
+DELETE /api/v1/dependents/{id}        - Xóa thông tin người thân
+POST   /api/v1/priority-applications  - Gửi hồ sơ đăng ký vé ưu tiên (Thẻ SV/CCCD)
+GET    /api/v1/priority-applications  - Xem danh sách & trạng thái hồ sơ đã gửi
+POST   /api/v1/upload                 - Upload file/ảnh chứng minh
 
-HỒ SƠ ƯU ĐÃI
-POST   /api/priority-applications         Gửi hồ sơ
-GET    /api/priority-applications         Hồ sơ của tôi
-GET    /api/priority-applications/{id}    Chi tiết
-
-QUẢN TRỊ
-POST   /api/admin/lines                  Thêm tuyến
-PATCH  /api/admin/lines/{id}              Sửa/trạng thái tuyến
-POST   /api/admin/stations               Thêm ga
-PATCH  /api/admin/stations/{id}           Sửa ga
-POST   /api/admin/ticket-types           Thêm loại vé
-PATCH  /api/admin/ticket-types/{id}       Sửa loại vé
-GET    /api/admin/priority-applications  Hồ sơ chờ duyệt
-PATCH  /api/admin/priority-applications/{id} Duyệt/từ chối
-GET    /api/admin/orders                 Xem đơn
-GET    /api/admin/transactions           Xem giao dịch
+6. (TÙY CHỌN NẾU MUỐN LÀM THÊM) NGHIỆP VỤ QUÉT MÃ VÉ
+POST   /api/v1/ticket-validations     - Kiểm tra và ghi nhận quét vé (Cần thêm Web Admin quét QR nếu làm)
 
 QUY TẮC
 Mọi API dữ liệu riêng cần đăng nhập và kiểm tra quyền sở hữu.

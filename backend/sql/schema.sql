@@ -1,0 +1,3 @@
+-- File dành cho script tạo bảng metro.
+-- Bộ khung này chưa chứa CREATE TABLE. Không import file này để tạo database.
+-- Sẽ bổ sung khi chốt tên bảng và cấu trúc database của nhóm.

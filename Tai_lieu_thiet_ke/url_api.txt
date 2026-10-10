@@ -1,9 +1,3 @@
-METRO APP — URL API ĐỀ XUẤT
-Đây là thiết kế, chưa phải URL đã hoạt động.
-Tiền tố: /api. {id} là mã bản ghi cụ thể.
-Backend PHP trả JSON. Các URL đẹp cần router/cấu hình chuyển request đến PHP.
-GET: đọc; POST: tạo/thực hiện; PATCH: cập nhật; DELETE: xóa.
-
 Tiền tố chung: /api/v1
 
 1. TÀI KHOẢN & HỒ SƠ (AUTH & PROFILE)
@@ -41,10 +35,3 @@ POST   /api/v1/upload                 - Upload file/ảnh chứng minh
 
 6. (TÙY CHỌN NẾU MUỐN LÀM THÊM) NGHIỆP VỤ QUÉT MÃ VÉ
 POST   /api/v1/ticket-validations     - Kiểm tra và ghi nhận quét vé (Cần thêm Web Admin quét QR nếu làm)
-
-QUY TẮC
-Mọi API dữ liệu riêng cần đăng nhập và kiểm tra quyền sở hữu.
-API admin cần role ADMIN; quét QR cần quyền riêng.
-Nếu dùng session cookie, bảo vệ CSRF cho request thay đổi dữ liệu.
-Không trả password hoặc password hash trong JSON.
-

@@ -1,0 +1,77 @@
+
+ĐĂNG KÝ VÉ ƯU TIÊN
+
+MỚI POST  /api/registration/submit.php
+          Nộp đơn đăng ký vé ưu tiên:
+          is_for_other, full_name, dob, id_card, phone, email, category
+
+MỚI GET   /api/registration/history.php
+          Lấy danh sách các đơn đăng ký vé ưu tiên của người đang đăng nhập
+
+
+
+#### 1. JSON Request & Response mẫu
+
+* **Nộp đơn (`POST /api/registration/submit.php`)**
+
+* **Request Body:**
+```json
+{
+  "is_for_other": false,
+  "full_name": "Trịnh Minh Hoàng",
+  "dob": "2005-10-30",
+  "id_card": "022205004449",
+  "phone": "0987654321",
+  "email": "hoangffffp@gmail.com",
+  "category": "student"
+}
+
+```
+
+
+* **Response:**
+```json
+{
+  "success": true,
+  "message": "Nộp đơn đăng ký thành công.",
+  "data": { "id": 1, "status": "PENDING" }
+}
+
+
+* **Lịch sử đơn (`GET /api/registration/history.php`)**
+
+* **Response:**
+```json
+{
+  "success": true,
+  "message": "Lấy danh sách đăng ký thành công.",
+  "data": [
+    {
+      "id": 1,
+      "is_for_other": false,
+      "full_name": "Trịnh Minh Hoàng",
+      "category": "student",
+      "status": "PENDING",
+      "created_at": "2026-10-18 16:30:00"
+    }
+  ]
+}
+
+
+```sql
+CREATE TABLE IF NOT EXISTS priority_registrations (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    is_for_other TINYINT(1) DEFAULT 0,
+    full_name VARCHAR(100) NOT NULL,
+    dob DATE NOT NULL,
+    id_card VARCHAR(20) NOT NULL,
+    phone VARCHAR(20) NOT NULL,
+    email VARCHAR(100) DEFAULT NULL,
+    category ENUM('student', 'elderly', 'revolution', 'poor') NOT NULL,
+    status ENUM('PENDING', 'APPROVED', 'REJECTED') DEFAULT 'PENDING',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+

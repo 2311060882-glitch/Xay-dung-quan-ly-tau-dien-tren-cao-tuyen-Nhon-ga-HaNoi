@@ -1,59 +1,148 @@
 1. TÀI KHOẢN & HỒ SƠ
 
-POST   /api/v1/auth/register
-       Đăng ký: fullname, phone, password
+CŨ POST   /api/v1/auth/register
+          Đăng ký: fullname, phone, password
 
-POST   /api/v1/auth/login
-       Đăng nhập: phone, password
+CŨ POST   /api/v1/auth/login
+          Đăng nhập: phone, password
+          Bổ sung trả về role: USER hoặc ADMIN
 
-POST   /api/v1/auth/logout
-       Đăng xuất phiên hiện tại
+CŨ POST   /api/v1/auth/logout
+          Đăng xuất phiên hiện tại
 
-GET    /api/v1/me
-       Lấy thông tin người đang đăng nhập
+CŨ GET    /api/v1/me
+          Lấy thông tin người đang đăng nhập
+          Bổ sung trả về role: USER hoặc ADMIN
 
-PUT    /api/v1/me
-       Cập nhật họ tên và số điện thoại
+CŨ PUT    /api/v1/me
+          Cập nhật họ tên và số điện thoại
 
-POST   /api/v1/me/change-password
-       Đổi mật khẩu: current_password, new_password
+CŨ POST   /api/v1/me/change-password
+          Đổi mật khẩu: current_password, new_password
 
 
 2. TUYẾN, GA & LOẠI VÉ
 
-GET    /api/v1/lines
-       Lấy danh sách tuyến tàu
+CŨ GET    /api/v1/lines
+          Lấy danh sách tuyến tàu
 
-GET    /api/v1/lines/{id}/stations
-       Lấy danh sách ga của tuyến, sắp xếp theo order_index
+CŨ GET    /api/v1/lines/{id}/stations
+          Lấy danh sách ga của tuyến, sắp xếp theo order_index
 
-GET    /api/v1/ticket-types
-       Lấy danh sách loại vé, giá và thời hạn
+CŨ GET    /api/v1/ticket-types
+          Lấy danh sách loại vé, giá và thời hạn
 
 
 3. MUA VÉ & MÃ QR
 
-POST   /api/v1/tickets/buy
-       Mua vé cho bản thân: ticket_type_id, line_id
+CŨ POST   /api/v1/tickets/buy
+          Mua vé cho bản thân: ticket_type_id, line_id
 
-GET    /api/v1/tickets
-       Lấy danh sách vé của người đang đăng nhập
+CŨ GET    /api/v1/tickets
+          Lấy danh sách vé của người đang đăng nhập
 
-GET    /api/v1/tickets/{id}
-       Lấy chi tiết một vé thuộc người đang đăng nhập
+CŨ GET    /api/v1/tickets/{id}
+          Lấy chi tiết một vé thuộc người đang đăng nhập
 
-GET    /api/v1/tickets/active-qr
-       Lấy vé được mua gần nhất còn hiệu lực và sử dụng được
-       Trả dữ liệu vé và qr_code để frontend tạo ảnh QR
+CŨ GET    /api/v1/tickets/active-qr
+          Lấy vé được mua gần nhất còn hiệu lực và sử dụng được
+          Trả dữ liệu vé và qr_code để frontend tạo ảnh QR
 
 
 4. VÍ & LỊCH SỬ GIAO DỊCH
 
-GET    /api/v1/wallet
-       Lấy số dư ví của người đang đăng nhập
+CŨ GET    /api/v1/wallet
+          Lấy số dư ví của người đang đăng nhập
 
-POST   /api/v1/wallet/top-up
-       Nạp tiền giả lập cho bài tập: amount
+CŨ POST   /api/v1/wallet/top-up
+          Nạp tiền giả lập cho bài tập: amount
 
-GET    /api/v1/wallet/transactions
-       Lấy lịch sử nạp tiền và mua vé
+CŨ GET    /api/v1/wallet/transactions
+          Lấy lịch sử nạp tiền và mua vé
+
+
+5. ADMIN — QUẢN LÝ VÉ ĐÃ BÁN
+
+MỚI GET   /api/v1/admin/tickets
+          Lấy danh sách tất cả vé đã bán, có phân trang
+          Lọc theo: from, to, line_id, ticket_type_id, status
+
+MỚI GET   /api/v1/admin/tickets/{id}
+          Lấy chi tiết vé, thông tin chủ vé và lịch sử sử dụng
+
+
+6. ADMIN — THỐNG KÊ BÁN VÉ
+
+MỚI GET   /api/v1/admin/reports/ticket-sales
+          Thống kê số vé đã bán và doanh thu bán vé
+          Lọc theo: from, to, line_id, ticket_type_id
+          Nhóm theo group_by: day, line hoặc ticket_type
+
+
+7. ADMIN — QUẢN LÝ CHUYẾN TÀU
+
+MỚI POST  /api/v1/admin/trips
+          Tạo chuyến: line_id, trip_code, direction,
+          departure_time, capacity
+
+MỚI GET   /api/v1/admin/trips
+          Lấy danh sách chuyến, có phân trang
+          Lọc theo: date, line_id, direction, status
+
+MỚI GET   /api/v1/admin/trips/{id}
+          Lấy chi tiết một chuyến tàu
+
+MỚI PATCH /api/v1/admin/trips/{id}
+          Cập nhật chuyến chưa khởi hành: departure_time, capacity
+
+MỚI PATCH /api/v1/admin/trips/{id}/status
+          Cập nhật trạng thái chuyến: status
+          SCHEDULED, RUNNING, COMPLETED hoặc CANCELLED
+
+MỚI GET   /api/v1/admin/trips/{id}/occupancy
+          Lấy sức chứa, tổng lượt lên, tổng lượt xuống,
+          số khách còn trên chuyến và số chỗ còn lại
+
+MỚI GET   /api/v1/admin/trips/{id}/journeys
+          Lấy danh sách lượt đi của chuyến, có phân trang
+          Bao gồm vé, hành khách, ga lên, ga xuống,
+          thời gian lên, thời gian xuống và trạng thái
+
+
+8. ADMIN — QUÉT QR & KIỂM SOÁT VÉ
+
+MỚI POST  /api/v1/admin/tickets/validate-qr
+          Kiểm tra QR trước khi xác nhận lên hoặc xuống
+          Dữ liệu: qr_code, trip_id, station_id, action
+          action: CHECK_IN hoặc CHECK_OUT
+          Chỉ kiểm tra, chưa ghi nhận lượt lên hoặc xuống
+
+MỚI POST  /api/v1/admin/tickets/check-in
+          Quét QR xác nhận khách lên chuyến
+          Dữ liệu: qr_code, trip_id, station_id
+          Ghi nhận lượt đi, ga lên, giờ lên và admin xác nhận
+
+MỚI POST  /api/v1/admin/tickets/check-out
+          Quét QR xác nhận khách xuống chuyến
+          Dữ liệu: qr_code, trip_id, station_id
+          Ghi nhận ga xuống, giờ xuống và admin xác nhận
+          Đóng lượt đi, đánh dấu vé lượt đã sử dụng
+
+
+9. TRA CỨU CHUYẾN TÀU
+
+MỚI GET   /api/v1/trips
+          Lấy danh sách chuyến để người dùng tra cứu
+          Lọc theo: date, line_id, direction, status
+
+MỚI GET   /api/v1/trips/{id}
+          Lấy chi tiết chuyến, giờ khởi hành, chiều chạy,
+          trạng thái và số chỗ còn lại theo lượt quét
+
+
+10. LỊCH SỬ ĐI TÀU
+
+MỚI GET   /api/v1/me/journeys
+          Lấy lịch sử các lượt đi của người đang đăng nhập
+          Bao gồm vé, chuyến, ga lên, ga xuống,
+          thời gian lên, thời gian xuống và trạng thái

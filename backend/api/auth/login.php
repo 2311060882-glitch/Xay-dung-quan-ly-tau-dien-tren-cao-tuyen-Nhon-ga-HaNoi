@@ -10,12 +10,7 @@ $input = read_json();
 
 foreach (['phone', 'password'] as $field) {
     if (!isset($input[$field]) || !is_string($input[$field])) {
-        respond(
-            false,
-            "Thiếu hoặc sai kiểu dữ liệu: $field.",
-            null,
-            400
-        );
+        validation_error([$field => "Thiếu hoặc sai kiểu dữ liệu: $field."]);
     }
 }
 
@@ -23,7 +18,7 @@ $phone = trim($input['phone']);
 $userPassword = $input['password'];
 
 if (!preg_match('/^0[0-9]{9}$/', $phone)) {
-    respond(false, 'Số điện thoại không hợp lệ.', null, 400);
+    validation_error(['phone' => 'Số điện thoại không hợp lệ.']);
 }
 
 if (
@@ -31,14 +26,14 @@ if (
     || strlen($userPassword) > 72
     || strpos($userPassword, "\0") !== false
 ) {
-    respond(false, 'Mật khẩu không hợp lệ.', null, 400);
+    validation_error(['password' => 'Mật khẩu không hợp lệ.']);
 }
 
 require_once __DIR__ . '/../../config/database.php';
 
 try {
     $stmt = $conn->prepare(
-        'SELECT id, fullname, phone, password_hash
+        'SELECT id, fullname, phone, role, password_hash
          FROM `users`
          WHERE phone = ?'
     );
@@ -76,6 +71,7 @@ try {
             'id' => (int) $user['id'],
             'fullname' => $user['fullname'],
             'phone' => $user['phone'],
+            'role' => $user['role'],
             'csrf_token' => csrf_token()
         ]
     );

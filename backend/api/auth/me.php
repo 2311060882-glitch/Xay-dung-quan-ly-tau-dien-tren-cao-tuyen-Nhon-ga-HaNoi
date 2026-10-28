@@ -13,7 +13,7 @@ require_once __DIR__ . '/../../config/database.php';
 
 try {
     $stmt = $conn->prepare(
-        'SELECT id, fullname, phone, created_at
+        'SELECT id, fullname, phone, role, created_at
          FROM `users`
          WHERE id = ?'
     );
@@ -37,6 +37,7 @@ try {
             'id' => (int) $user['id'],
             'fullname' => $user['fullname'],
             'phone' => $user['phone'],
+            'role' => $user['role'],
             'created_at' => $user['created_at'],
             'csrf_token' => csrf_token()
         ]

@@ -32,3 +32,33 @@ RewriteRule ^api/v1/tickets/?$ api/tickets/list.php [END]
 RewriteRule ^api/v1/wallet/?$ api/wallet/balance.php [END]
 RewriteRule ^api/v1/wallet/top-up/?$ api/wallet/topup.php [END]
 RewriteRule ^api/v1/wallet/transactions/?$ api/wallet/transactions.php [END]
+# Quan tri ve va thong ke
+RewriteRule ^api/v1/admin/tickets/validate-qr/?$ api/admin/tickets/validate-qr.php [END]
+RewriteRule ^api/v1/admin/tickets/check-in/?$ api/admin/tickets/check-in.php [END]
+RewriteRule ^api/v1/admin/tickets/check-out/?$ api/admin/tickets/check-out.php [END]
+RewriteRule ^api/v1/admin/tickets/([0-9]+)/?$ api/admin/tickets/detail.php?route_id=$1 [END,QSA]
+RewriteRule ^api/v1/admin/tickets/?$ api/admin/tickets/list.php [END]
+RewriteRule ^api/v1/admin/reports/ticket-sales/?$ api/admin/reports/ticket-sales.php [END]
+
+# Chuyen tau: tach GET, POST va PATCH
+RewriteCond %{REQUEST_METHOD} =POST
+RewriteRule ^api/v1/admin/trips/?$ api/admin/trips/create.php [END]
+RewriteRule ^api/v1/admin/trips/?$ api/admin/trips/list.php [END]
+RewriteRule ^api/v1/admin/trips/([0-9]+)/status/?$ api/admin/trips/status.php?route_id=$1 [END,QSA]
+RewriteCond %{REQUEST_METHOD} =PATCH
+RewriteRule ^api/v1/admin/trips/([0-9]+)/?$ api/admin/trips/update.php?route_id=$1 [END,QSA]
+RewriteRule ^api/v1/admin/trips/([0-9]+)/?$ api/admin/trips/detail.php?route_id=$1 [END,QSA]
+RewriteRule ^api/v1/trips/([0-9]+)/?$ api/trips/detail.php?route_id=$1 [END,QSA]
+RewriteRule ^api/v1/trips/?$ api/trips/list.php [END]
+RewriteRule ^api/v1/me/journeys/?$ api/auth/journeys.php [END]
+
+RewriteRule ^api/v1/relatives/?$ api/relatives/index.php [END]
+RewriteRule ^api/v1/priority/?$ api/priority/index.php [END]
+RewriteRule ^api/v1/admin/priority/?$ api/admin/priority/index.php [END]
+RewriteRule ^api/v1/admin/lines/?$ api/admin/lines/index.php [END]
+RewriteRule ^api/v1/admin/stations/?$ api/admin/stations/index.php [END]
+RewriteRule ^api/v1/admin/journeys/?$ api/admin/journeys/index.php [END]
+RewriteRule ^api/v1/admin/reports/traffic/?$ api/admin/reports/traffic.php [END]
+
+# API khong ton tai van tra JSON.
+RewriteRule ^api/v1(?:/.*)?$ api/not-found.php [END]

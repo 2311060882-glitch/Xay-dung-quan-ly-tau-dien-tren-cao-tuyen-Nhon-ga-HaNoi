@@ -12,30 +12,25 @@ $input = read_json();
 
 foreach (['current_password', 'new_password'] as $field) {
     if (!isset($input[$field]) || !is_string($input[$field])) {
-        respond(false, "Thiếu hoặc sai kiểu dữ liệu: $field.", null, 400);
+        validation_error([$field => "Thiếu hoặc sai kiểu dữ liệu: $field."]);
     }
 }
 
 $currentPassword = $input['current_password'];
 $newPassword = $input['new_password'];
 
-foreach ([$currentPassword, $newPassword] as $value) {
+foreach (['current_password' => $currentPassword, 'new_password' => $newPassword] as $field => $value) {
     if (
         strlen($value) < 8
         || strlen($value) > 72
         || strpos($value, "\0") !== false
     ) {
-        respond(
-            false,
-            'Mật khẩu phải dài từ 8 đến 72 byte và không chứa ký tự NULL.',
-            null,
-            400
-        );
+        validation_error([$field => 'Mật khẩu phải dài từ 8 đến 72 byte và không chứa ký tự NULL.']);
     }
 }
 
 if ($currentPassword === $newPassword) {
-    respond(false, 'Mật khẩu mới phải khác mật khẩu hiện tại.', null, 400);
+    validation_error(['new_password' => 'Mật khẩu mới phải khác mật khẩu hiện tại.']);
 }
 
 require_once __DIR__ . '/../../config/database.php';
@@ -72,7 +67,7 @@ try {
         $conn->rollback();
         $transactionStarted = false;
 
-        respond(false, 'Mật khẩu hiện tại không đúng.', null, 400);
+        validation_error(['current_password' => 'Mật khẩu hiện tại không đúng.']);
     }
 
     $newPasswordHash = password_hash($newPassword, PASSWORD_BCRYPT);

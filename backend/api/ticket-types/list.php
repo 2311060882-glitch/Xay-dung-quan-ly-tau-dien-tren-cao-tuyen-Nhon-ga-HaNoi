@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../config/database.php';
 
 try {
     $sql = "
-        SELECT id, name, type, price, valid_days
+        SELECT id, name, type, price, valid_days, requires_priority
         FROM `ticket_types`
         ORDER BY id
     ";
@@ -23,6 +23,7 @@ try {
             'name' => $row['name'],
             'type' => $row['type'],
             'price' => $row['price'],
+            'requires_priority' => (bool) $row['requires_priority'],
             'valid_days' => (int) $row['valid_days']
         ];
     }

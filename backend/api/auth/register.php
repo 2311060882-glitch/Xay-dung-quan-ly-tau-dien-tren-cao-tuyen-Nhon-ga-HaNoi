@@ -8,12 +8,7 @@ $input = read_json();
 
 foreach (['fullname', 'phone', 'password'] as $field) {
     if (!isset($input[$field]) || !is_string($input[$field])) {
-        respond(
-            false,
-            "Thiếu hoặc sai kiểu dữ liệu: $field.",
-            null,
-            400
-        );
+        validation_error([$field => "Thiếu hoặc sai kiểu dữ liệu: $field."]);
     }
 }
 
@@ -24,16 +19,11 @@ $userPassword = $input['password'];
 $nameLength = preg_match_all('/./us', $fullname);
 
 if ($nameLength === false || $nameLength < 1 || $nameLength > 100) {
-    respond(false, 'Họ tên phải có từ 1 đến 100 ký tự.', null, 400);
+    validation_error(['fullname' => 'Họ tên phải có từ 1 đến 100 ký tự.']);
 }
 
 if (!preg_match('/^0[0-9]{9}$/', $phone)) {
-    respond(
-        false,
-        'Số điện thoại phải gồm 10 chữ số, bắt đầu bằng 0.',
-        null,
-        400
-    );
+    validation_error(['phone' => 'Số điện thoại phải gồm 10 chữ số, bắt đầu bằng 0.']);
 }
 
 if (
@@ -41,12 +31,7 @@ if (
     || strlen($userPassword) > 72
     || strpos($userPassword, "\0") !== false
 ) {
-    respond(
-        false,
-        'Mật khẩu phải dài từ 8 đến 72 byte và không chứa ký tự NULL.',
-        null,
-        400
-    );
+    validation_error(['password' => 'Mật khẩu phải dài từ 8 đến 72 byte và không chứa ký tự NULL.']);
 }
 
 $passwordHash = password_hash($userPassword, PASSWORD_BCRYPT);

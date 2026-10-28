@@ -13,12 +13,7 @@ $input = read_json();
 // API này yêu cầu gửi cả fullname và phone.
 foreach (['fullname', 'phone'] as $field) {
     if (!isset($input[$field]) || !is_string($input[$field])) {
-        respond(
-            false,
-            "Thiếu hoặc sai kiểu dữ liệu: $field.",
-            null,
-            400
-        );
+        validation_error([$field => "Thiếu hoặc sai kiểu dữ liệu: $field."]);
     }
 }
 
@@ -28,16 +23,11 @@ $phone = trim($input['phone']);
 $nameLength = preg_match_all('/./us', $fullname);
 
 if ($nameLength === false || $nameLength < 1 || $nameLength > 100) {
-    respond(false, 'Họ tên phải có từ 1 đến 100 ký tự.', null, 400);
+    validation_error(['fullname' => 'Họ tên phải có từ 1 đến 100 ký tự.']);
 }
 
 if (!preg_match('/^0[0-9]{9}$/', $phone)) {
-    respond(
-        false,
-        'Số điện thoại phải gồm 10 chữ số, bắt đầu bằng 0.',
-        null,
-        400
-    );
+    validation_error(['phone' => 'Số điện thoại phải gồm 10 chữ số, bắt đầu bằng 0.']);
 }
 
 require_once __DIR__ . '/../../config/database.php';

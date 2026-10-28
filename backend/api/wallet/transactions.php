@@ -27,8 +27,8 @@ try {
         $transactions[] = [
             'id' => (int) $row['id'],
             'ticket_id' => $row['ticket_id'] === null
-                ? null
-                : (int) $row['ticket_id'],
+            ? null
+            : (int) $row['ticket_id'],
             'type' => $row['type'],
             'amount' => $row['amount'],
             'created_at' => $row['created_at']

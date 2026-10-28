@@ -5,15 +5,14 @@ require_once __DIR__ . '/../../helpers/request.php';
 require_method('GET');
 
 // Lấy line_id từ URL và kiểm tra là số nguyên dương.
-$lineId = filter_input(
-    INPUT_GET,
-    'line_id',
+$lineId = filter_var(
+    $_GET['line_id'] ?? null,
     FILTER_VALIDATE_INT,
     ['options' => ['min_range' => 1]]
 );
 
 if ($lineId === false || $lineId === null) {
-    respond(false, 'line_id phải là số nguyên dương.', null, 400);
+    validation_error(['line_id' => 'line_id phải là số nguyên dương.']);
 }
 
 require_once __DIR__ . '/../../config/database.php';

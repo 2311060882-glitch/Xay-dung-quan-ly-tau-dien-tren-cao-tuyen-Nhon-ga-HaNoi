@@ -1,4 +1,5 @@
 <?php
+
 require_once __DIR__ . '/response.php';
 function require_method(string $method): void
 {
@@ -7,13 +8,13 @@ function require_method(string $method): void
         respond(false, 'Phương thức không được hỗ trợ.', null, 405);
     }
 }
+
 function read_json(): array
 {
     $contentType = strtolower(trim(explode(';', $_SERVER['CONTENT_TYPE'] ?? '')[0]));
     if ($contentType !== 'application/json') {
         respond(false, 'Content-Type phải là application/json.', null, 415);
     }
-
     $raw = file_get_contents('php://input');
     try {
         $value = json_decode($raw, false, 512, JSON_THROW_ON_ERROR);

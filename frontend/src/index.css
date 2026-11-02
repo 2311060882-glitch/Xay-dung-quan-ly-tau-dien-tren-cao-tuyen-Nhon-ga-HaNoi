@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+@theme {
+  /* Khai báo màu chủ đạo của app Metro */
+  --color-primary: #0066FF;
+  --color-success: #00C853;
+  --color-warning: #FF8F00;
+}
+
+body {
+  background-color: #F3F4F6;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
